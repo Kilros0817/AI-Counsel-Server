@@ -33,11 +33,21 @@ export interface Message {
   timestamp: number;
 }
 
+export type InterviewState =
+  | "INIT"
+  | "LANGUAGE_SELECTED"
+  | "DEMOGRAPHICS"
+  | "INTERVIEW"
+  | "COMPLETE";
+
 export interface DimensionCoverage {
   key: DimensionKey;
   covered: boolean;
-  turnCount: number;
-  signals: string[];
+  turnCount: number;   
+  signals: string[];   
+ 
+  depthLevel: number;  
+  coverageScore: number; 
 }
 
 export interface InterviewSession {
@@ -49,11 +59,19 @@ export interface InterviewSession {
   demographicsSubmitted: boolean;
   started: boolean;
   finished: boolean;
+  closingStage: "await_final" | "done" | "";
+  closingStartedAt?: number | undefined;
+  state: InterviewState;
   currentDimension: DimensionKey;
   dimensionIndex: number;
   coverage: Record<DimensionKey, DimensionCoverage>;
   history: Message[];
   turnCount: number;
+  questionCount: number;
+  askedQuestionFps: string[];
+  painLockDim?: DimensionKey | null;
+  painLockUntilTurns?: number;
+  lastAcksUsed: string[];
   createdAt: number;
   lastActivityAt: number;
 }
